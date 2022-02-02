@@ -47,9 +47,9 @@ func main() {
 				snap := runtime.Snapshot().Entries()
 
 				for key, value := range snap {
-					if value.Uint64Valid {
-						fmt.Println("Name:", key, value.Modified, value.Uint64Valid, value.Uint64Value)
-					}
+					// if value.Uint64Valid {
+					fmt.Println("Name:", key, value.Modified, value.Uint64Valid)
+					// }
 				}
 
 			}
