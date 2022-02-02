@@ -18,7 +18,7 @@ func main() {
 
 	// store := stats.NewDefaultStore()
 	refresher := loader.DirectoryRefresher{}
-	runtime, err := loader.New2("test", "config", store.Scope("test"), &refresher)
+	runtime, err := loader.New2("/test", "config", store.Scope("test"), &refresher)
 	if err != nil {
 		// Handle error
 		fmt.Println(err)
@@ -50,3 +50,13 @@ func main() {
 	}
 	// fmt.Println("configTest!")
 }
+
+// volumeMounts:
+// - name: testconfig
+//   mountPath: /test/config/
+
+//   volumes:
+//   - name: testconfig
+// 	configMap:
+// 	  name: testconfig
+// 	  defaultMode: 256
