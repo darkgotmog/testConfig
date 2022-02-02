@@ -18,16 +18,18 @@ func main() {
 
 	// store := stats.NewDefaultStore()
 	refresher := loader.DirectoryRefresher{}
-	runtime, err := loader.New2("../../test", "config", store.Scope("test"), &refresher)
+	runtime, err := loader.New2("test", "config", store.Scope("test"), &refresher)
 	if err != nil {
 		// Handle error
 		fmt.Println(err)
+		os.Exit(0)
 	}
 	chanChaneFile := make(chan int)
 
 	runtime.AddUpdateCallback(chanChaneFile)
 	s := runtime.Snapshot()
-	s.Get("conf1")
+	fmt.Println(s.Entries())
+	// s.Get("conf1")
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
