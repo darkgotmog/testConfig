@@ -8,17 +8,16 @@ import (
 
 	"github.com/lyft/goruntime/loader"
 	stats "github.com/lyft/gostats"
-	"github.com/lyft/gostats/mock"
 )
 
 func main() {
 
-	sink := mock.NewSink()
-	store := stats.NewStore(sink, false)
+	// sink := mock.NewSink()
+	// store := stats.NewStore(sink, false)
 
-	// store := stats.NewDefaultStore()
-	refresher := loader.SymlinkRefresher{}
-	runtime, err := loader.New2("/test", "config", store.Scope("test"), &refresher)
+	store := stats.NewDefaultStore()
+	refresher := loader.DirectoryRefresher{}
+	runtime, err := loader.New2("test", "config", store.ScopeWithTags("test", map[string]string{}), &refresher)
 	if err != nil {
 		// Handle error
 		fmt.Println(err)
