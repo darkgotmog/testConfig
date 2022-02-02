@@ -17,7 +17,7 @@ func main() {
 	store := stats.NewStore(sink, false)
 
 	// store := stats.NewDefaultStore()
-	refresher := loader.DirectoryRefresher{}
+	refresher := loader.SymlinkRefresher{}
 	runtime, err := loader.New2("/test", "config", store.Scope("test"), &refresher)
 	if err != nil {
 		// Handle error
