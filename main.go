@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	os.Setenv("USE_STATSD", "false")
 
 	// sink := mock.NewSink()
 	// store := stats.NewStore(sink, false)
@@ -42,8 +43,15 @@ func main() {
 		select {
 		case <-chanChaneFile:
 			{
+				fmt.Println("config Change!")
 				snap := runtime.Snapshot().Entries()
-				fmt.Println("config Change!", snap)
+
+				for key, value := range snap {
+					if value.Uint64Valid {
+						fmt.Println("Name:", key, value.Modified, value.Uint64Valid, value.Uint64Value)
+					}
+				}
+
 			}
 		}
 	}
