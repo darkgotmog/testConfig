@@ -17,7 +17,7 @@ func main() {
 
 	store := stats.NewDefaultStore()
 	refresher := loader.DirectoryRefresher{}
-	runtime, err := loader.New2("test", "config", store.ScopeWithTags("test", map[string]string{}), &refresher)
+	runtime, err := loader.New2("/test", "config", store.ScopeWithTags("test", map[string]string{}), &refresher)
 	if err != nil {
 		// Handle error
 		fmt.Println(err)
