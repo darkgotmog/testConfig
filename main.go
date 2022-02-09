@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
+	"time"
 
 	"path/filepath"
 	"syscall"
+
+	"configTest/internal/message"
+	"configTest/internal/udp"
 
 	"github.com/lyft/goruntime/loader"
 	stats "github.com/lyft/gostats"
@@ -37,7 +42,7 @@ func main() {
 
 	store := stats.NewDefaultStore()
 	refresher := DirectRefresher{}
-	runtime, err := loader.New2("/test", "config", store.ScopeWithTags("test", map[string]string{}), &refresher)
+	runtime, err := loader.New2("test", "config", store.ScopeWithTags("test", map[string]string{}), &refresher)
 	if err != nil {
 		// Handle error
 		fmt.Println(err)
@@ -48,7 +53,21 @@ func main() {
 	runtime.AddUpdateCallback(chanChaneFile)
 	s := runtime.Snapshot()
 	fmt.Println(s.Entries())
-	// s.Get("conf1")
+
+	client := udp.NewClientUdp(context.Background(), "192.168.31.255", "6701", 5*time.Second)
+
+	err = client.Connect()
+	if err != nil {
+		fmt.Println("connect", err)
+	}
+
+	defer client.Close()
+
+	err = client.Send(&message.Message{Id: 3, Data: []byte("sdfasdf")})
+
+	if err != nil {
+		fmt.Println("send", err)
+	}
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
