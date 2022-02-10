@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udp-demo2
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bb: udp-demo2
+  template:
+    metadata:
+      labels:
+        bb: udp-demo2
+    spec:
+      containers:
+      - name: udp-demo2
+        image: localhost:5000/config:0
+        env:
+        - name: T_PORT
+          value: "30001"
+        - name: T_IP
+          value: "10.96.81.142"
+        - name: T_HOST
+          value: "0.0.0.0"
+        - name: T_FLAG_SEND
+          value: "false"
+          

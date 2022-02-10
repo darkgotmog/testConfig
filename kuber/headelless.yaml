@@ -1,0 +1,16 @@
+
+apiVersion: v1
+kind: Service  
+metadata:
+  name:  headless-udp
+spec:
+  selector:
+    bb: udp-demo
+  clusterIP: None
+  clusterIPs:
+    - None
+  type: ClusterIP
+  ports:
+    - protocol: UDP
+      port: 30001
+      targetPort: 30001

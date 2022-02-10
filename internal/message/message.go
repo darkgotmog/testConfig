@@ -1,7 +1,7 @@
 package message
 
 type Message struct {
-	Id   uint64
+	Id   int64
 	Data []byte
 }
 

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udp-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bb: udp-demo
+  template:
+    metadata:
+      labels:
+        bb: udp-demo
+    spec:
+      containers:
+      - name: udp-demo
+        image: localhost:5000/config:0
+        env:
+        - name: T_PORT
+          value: "30001"
+        - name: T_IP
+          value: "10.244.0.59"
+        - name: T_HOST
+          value: "0.0.0.0"
+        - name: T_FLAG_SEND
+          value: "true"
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udp-demo-port
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    bb: udp-demo
+  ports:
+  - port: 30001
+    targetPort: 30001
+    protocol: UDP
