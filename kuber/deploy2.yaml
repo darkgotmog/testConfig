@@ -13,16 +13,17 @@ spec:
       labels:
         bb: udp-demo2
     spec:
+      hostNetwork: true
       containers:
       - name: udp-demo2
-        image: localhost:5000/config:0
+        image: localhost:5000/config:1
         env:
         - name: T_PORT
-          value: "30001"
+          value: "6701"
         - name: T_IP
-          value: "10.96.81.142"
+          value: "239.0.0.0"
         - name: T_HOST
-          value: "0.0.0.0"
+          value: "239.0.0.0"
         - name: T_FLAG_SEND
           value: "false"
           

@@ -13,30 +13,17 @@ spec:
       labels:
         bb: udp-demo
     spec:
+      hostNetwork: true
       containers:
       - name: udp-demo
-        image: localhost:5000/config:0
+        image: localhost:5000/config:1
         env:
         - name: T_PORT
-          value: "30001"
+          value: "6701"
         - name: T_IP
-          value: "10.244.0.59"
+          value: "239.0.0.0"
         - name: T_HOST
-          value: "0.0.0.0"
+          value: "239.0.0.0"
         - name: T_FLAG_SEND
           value: "true"
           
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: udp-demo-port
-  namespace: default
-spec:
-  type: ClusterIP
-  selector:
-    bb: udp-demo
-  ports:
-  - port: 30001
-    targetPort: 30001
-    protocol: UDP

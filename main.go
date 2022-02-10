@@ -27,7 +27,7 @@ func main() {
 
 	defer server.Close()
 	// conf.IP = "127.0.0.1"
-	// conf.FlagSend = true
+	conf.FlagSend = true
 
 	client := udp.NewClientUdp(context.Background(), conf.IP, conf.Port, 5*time.Second)
 

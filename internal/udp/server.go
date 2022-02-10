@@ -14,7 +14,7 @@ type ServerUdp struct {
 	ctx         context.Context
 	ip          string
 	port        string
-	conn        net.PacketConn
+	conn        *net.UDPConn
 	ChanMessage chan message.Message
 }
 
@@ -32,10 +32,16 @@ func (c *ServerUdp) Start() error {
 
 	address := c.ip + ":" + c.port
 
-	conn, err := net.ListenPacket("udp", address)
+	addr, err := net.ResolveUDPAddr("udp", address)
 	if err != nil {
 		return err
 	}
+
+	conn, err := net.ListenMulticastUDP("udp", nil, addr)
+	if err != nil {
+		return err
+	}
+
 	c.conn = conn
 
 	go c.runLoop()
@@ -53,7 +59,7 @@ func (c *ServerUdp) runLoop() {
 	buffer := make([]byte, maxBufferSize)
 
 	for {
-		n, addr, err := c.conn.ReadFrom(buffer)
+		n, addr, err := c.conn.ReadFromUDP(buffer)
 		if err != nil {
 			continue
 		}
