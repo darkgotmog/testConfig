@@ -68,7 +68,7 @@ func LoopSendUdpMessage(client *udp.ClientUdp, id int64) {
 
 	ticker := time.NewTicker(3 * time.Second)
 	for _ = range ticker.C {
-		err := client.Send(&message.Message{Id: id, Data: []byte(time.Now().GoString())})
+		err := client.Send(&message.Message{Id: id, Data: []byte(time.Now().String())})
 
 		if err != nil {
 			fmt.Println("send", err)
