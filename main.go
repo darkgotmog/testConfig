@@ -5,6 +5,7 @@ import (
 	"configTest/internal/message"
 	"configTest/internal/udp"
 	"context"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"os/signal"
@@ -55,7 +56,7 @@ func main() {
 		case msg := <-server.ChanMessage:
 			{
 				if msg.Id != conf.ID {
-					fmt.Println("Msg: ", msg.Id, msg.Data)
+					fmt.Println("Msg: ", msg.Id, hex.Dump(msg.Data))
 				}
 
 			}
