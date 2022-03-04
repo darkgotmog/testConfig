@@ -7,11 +7,12 @@ import (
 )
 
 type Config struct {
-	Host     string
-	IP       string
-	Port     string
-	ID       int64
-	FlagSend bool
+	Host       string
+	IP         string
+	Port       string
+	ID         int64
+	FlagSend   bool
+	SharedName string
 }
 
 func NewConfig() *Config {
@@ -39,6 +40,12 @@ func (con *Config) Load() {
 		host = "239.0.0.0"
 	}
 	con.Host = host
+
+	sharedName := os.Getenv("SHARED_NAME")
+	if sharedName == "" {
+		sharedName = "test"
+	}
+	con.SharedName = sharedName
 
 	id, err := strconv.ParseInt(os.Getenv("T_ID"), 10, 64)
 	if err != nil {

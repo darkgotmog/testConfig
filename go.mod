@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/hidez8891/shm v0.0.0-20200313135933-0ec4df5f28c7 // indirect
 	github.com/lyft/goruntime v0.2.6
 	github.com/lyft/gostats v0.4.5
 	github.com/sirupsen/logrus v1.8.1 // indirect

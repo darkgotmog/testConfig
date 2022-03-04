@@ -11,6 +11,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/hidez8891/shm"
 )
 
 func main() {
@@ -39,8 +41,21 @@ func main() {
 
 	defer client.Close()
 
+	var sh *shm.Memory
+
 	if conf.FlagSend {
-		go LoopSendUdpMessage(client, conf.ID)
+		sh, err := shm.Create(conf.SharedName, 256)
+		if err != nil {
+			fmt.Println("Shared memory don't create!")
+		}
+		defer sh.Close()
+		go LoopSendUdpMessage(client, conf.ID, sh)
+	} else {
+		sh, err := shm.Open(conf.SharedName, 256)
+		if err != nil {
+			fmt.Println("Shared memory don't open!")
+		}
+		defer sh.Close()
 	}
 
 	c := make(chan os.Signal)
@@ -57,6 +72,12 @@ func main() {
 			{
 				if msg.Id != conf.ID {
 					fmt.Println("Msg: ", msg.Id, hex.Dump(msg.Data))
+
+					rbuf := make([]byte, msg.LenShared)
+					_, err := sh.Read(rbuf)
+					if err == nil {
+						fmt.Println("Msg shared: ", hex.Dump(rbuf))
+					}
 				}
 
 			}
@@ -65,11 +86,15 @@ func main() {
 
 }
 
-func LoopSendUdpMessage(client *udp.ClientUdp, id int64) {
+func LoopSendUdpMessage(client *udp.ClientUdp, id int64, sh *shm.Memory) {
 
 	ticker := time.NewTicker(3 * time.Second)
 	for _ = range ticker.C {
-		err := client.Send(&message.Message{Id: id, Data: []byte(time.Now().String())})
+
+		wbuf := []byte("Hello World" + time.Now().String())
+		sh.Write(wbuf)
+
+		err := client.Send(&message.Message{Id: id, Data: []byte(time.Now().String()), LenShared: len(wbuf)})
 
 		if err != nil {
 			fmt.Println("send", err)

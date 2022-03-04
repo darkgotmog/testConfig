@@ -1,8 +1,9 @@
 package message
 
 type Message struct {
-	Id   int64
-	Data []byte
+	Id        int64
+	Data      []byte
+	LenShared int
 }
 
 type RequestMessage struct {
