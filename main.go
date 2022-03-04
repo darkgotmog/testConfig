@@ -44,19 +44,19 @@ func main() {
 	var sh *shm.Memory
 
 	if conf.FlagSend {
-		sh, err := shm.Create(conf.SharedName, 256)
+		sh, err = shm.Create(conf.SharedName, 256)
 		if err != nil {
 			fmt.Println("Shared memory don't create!")
 		}
-		defer sh.Close()
+
 		go LoopSendUdpMessage(client, conf.ID, sh)
 	} else {
-		sh, err := shm.Open(conf.SharedName, 256)
+		sh, err = shm.Open(conf.SharedName, 256)
 		if err != nil {
 			fmt.Println("Shared memory don't open!")
 		}
-		defer sh.Close()
 	}
+	defer sh.Close()
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
