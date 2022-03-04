@@ -61,5 +61,10 @@ func (con *Config) Load() {
 		con.FlagSend = flag
 	}
 
-	MY_POD_NAME
+	podName := os.Getenv("MY_POD_NAME")
+	if podName == "" {
+		podName = "podTestUdp"
+	}
+	con.PodName = podName
+
 }
