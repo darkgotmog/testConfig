@@ -13,6 +13,7 @@ type Config struct {
 	ID         int64
 	FlagSend   bool
 	SharedName string
+	PodName    string
 }
 
 func NewConfig() *Config {
@@ -59,4 +60,6 @@ func (con *Config) Load() {
 	} else {
 		con.FlagSend = flag
 	}
+
+	MY_POD_NAME
 }

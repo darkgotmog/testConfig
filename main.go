@@ -49,7 +49,7 @@ func main() {
 			fmt.Println("Shared memory don't create!")
 		}
 
-		go LoopSendUdpMessage(client, conf.ID, sh)
+		go LoopSendUdpMessage(client, conf.ID, sh, conf.PodName)
 	} else {
 		sh, err = shm.Open(conf.SharedName, 256)
 		if err != nil {
@@ -87,12 +87,12 @@ func main() {
 
 }
 
-func LoopSendUdpMessage(client *udp.ClientUdp, id int64, sh *shm.Memory) {
+func LoopSendUdpMessage(client *udp.ClientUdp, id int64, sh *shm.Memory, podName string) {
 
 	ticker := time.NewTicker(3 * time.Second)
 	for _ = range ticker.C {
 
-		wbuf := []byte("Hello World" + time.Now().String())
+		wbuf := []byte(podName + " " + time.Now().String())
 		count, err := sh.WriteAt(wbuf, 0)
 		fmt.Println("coun, err", count, err)
 
