@@ -71,10 +71,11 @@ func main() {
 		case msg := <-server.ChanMessage:
 			{
 				if msg.Id != conf.ID {
-					fmt.Println("Msg: ", msg.Id, hex.Dump(msg.Data))
+					// fmt.Println("Msg: ", msg.Id, hex.Dump(msg.Data))
 
 					rbuf := make([]byte, msg.LenShared)
-					_, err := sh.Read(rbuf)
+					count, err := sh.ReadAt(rbuf, 0)
+					fmt.Println("coun, err", count, err)
 					if err == nil {
 						fmt.Println("Msg shared: ", hex.Dump(rbuf))
 					}
@@ -92,9 +93,10 @@ func LoopSendUdpMessage(client *udp.ClientUdp, id int64, sh *shm.Memory) {
 	for _ = range ticker.C {
 
 		wbuf := []byte("Hello World" + time.Now().String())
-		sh.Write(wbuf)
+		count, err := sh.WriteAt(wbuf, 0)
+		fmt.Println("coun, err", count, err)
 
-		err := client.Send(&message.Message{Id: id, Data: []byte(time.Now().String()), LenShared: len(wbuf)})
+		err = client.Send(&message.Message{Id: id, Data: []byte(time.Now().String()), LenShared: len(wbuf)})
 
 		if err != nil {
 			fmt.Println("send", err)
